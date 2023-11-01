@@ -1,5 +1,7 @@
 import logging
 import os
+from json import dumps
+from pathlib import Path
 
 import pandas as pd
 
@@ -38,13 +40,24 @@ def rand_book(ascii_width=90, colorize=True):
             logger.exception(repr(error))
             continue
 
-        ascii_image = image_to_ascii(
-            info["cover"], new_width=ascii_width, colorize=colorize
-        )
+        ascii_image, colors = image_to_ascii(info["cover"], new_width=ascii_width)
 
-        #        logger.info("Writing to file 'image.txt'")
-        #        with open(Path("./image.txt"), "w") as f:
-        #            f.write(ascii_image)
+        json_image = [[]]
+        for i in ascii_image:
+            if i == "\n":
+                json_image.append([])
+            else:
+                json_image[-1].append(i)
+
+        json_data = {"colors": colors.tolist(), "image": json_image}
+
+        logger.info("Writing to file 'data.json'")
+        with open(Path("data/data.json"), "w") as f:
+            f.write(dumps(json_data, indent=4))
+
+        assert len(colors) == len(json_image) and all(
+            [len(c_row) == len(p_row) for c_row, p_row in zip(colors, json_image)]
+        ), "image and colors do not share dimensionality"
 
         logger.info(f"Printing search info {book['title']}")
         print(f" {info['author']} ".center(ascii_width, "#"))
