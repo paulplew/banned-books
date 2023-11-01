@@ -1,4 +1,7 @@
 logs/
 configuration.conf
 
+notebooks/output/
+**/.ipynb_checkpoints
+
 **/__pycache__
