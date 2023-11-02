@@ -1,9 +1,9 @@
 import logging
 import os
-from json import dumps
-from pathlib import Path
+from logging.handlers import RotatingFileHandler
 
 import pandas as pd
+from aiohttp import web
 
 from backend.asciifier import image_to_ascii
 from backend.books import *
@@ -18,12 +18,19 @@ def setup_logger(log_level=logging.WARNING):
     logger.setLevel(log_level)
     log_format = f"BACKEND: %(asctime)s - %(levelname)s - Message: %(message)s"
     formatter = logging.Formatter(log_format)
-    handler = logging.FileHandler(BACKEND_LOG)
+    handler = RotatingFileHandler(
+        BACKEND_LOG,
+        mode="a",
+        maxBytes=5 * 1024 * 1024,
+        backupCount=2,
+        encoding=None,
+        delay=0,
+    )
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 
 
-def rand_book(ascii_width=90, colorize=True):
+def rand_book(ascii_width=90):
     data_file = os.path.join(DATA_DIR, "banned_books_clean.pickle")
     data = pd.read_pickle(data_file)
 
@@ -49,35 +56,20 @@ def rand_book(ascii_width=90, colorize=True):
             else:
                 json_image[-1].append(i)
 
-        json_data = {"colors": colors.tolist(), "image": json_image}
-
-        logger.info("Writing to file 'data.json'")
-        with open(Path("data/data.json"), "w") as f:
-            f.write(dumps(json_data, indent=4))
-
         assert len(colors) == len(json_image) and all(
             [len(c_row) == len(p_row) for c_row, p_row in zip(colors, json_image)]
         ), "image and colors do not share dimensionality"
 
-        logger.info(f"Printing search info {book['title']}")
-        print(f" {info['author']} ".center(ascii_width, "#"))
-        print(f" {info['title']} ".center(ascii_width, "#"))
-        print(ascii_image)
-        break
+        json_data = {"colors": colors.tolist(), "image": json_image}
+        return json_data
 
 
-def run(ascii_width=90, colorize=True):
+def run(request):
+    width = request.match_info.get("ascii_width", 90)
     setup_logger(log_level=logging.DEBUG)
     logger.info(" STARTING BACKEND ".center(100, "#"))
-    rand_book()
 
+    rand_book(width)
+    data = run(width)
 
-def main(ascii_width=90, colorize=True):
-    setup_logger(log_level=logging.DEBUG)
-    logger.info(" STARTING BACKEND BY MAIN ".center(100, "#"))
-    rand_book(ascii_width, colorize)
-
-
-if __name__ == "__main__":
-    colorize = True
-    main(colorize=colorize)
+    return web.json_response(data)

@@ -1,6 +1,7 @@
 import logging
 import urllib.parse
 from io import BytesIO
+from logging.handlers import RotatingFileHandler
 
 import requests
 from PIL import Image
@@ -19,7 +20,14 @@ def setup_logger(author, title, log_level=logging.WARNING):
     # set up logger
     log_format = f"BOOK: %(asctime)s - %(levelname)s - Author: {author} - Book: {title} - Message: %(message)s"
     formatter = logging.Formatter(log_format)
-    handler = logging.FileHandler(BOOK_LOG)
+    handler = RotatingFileHandler(
+        BOOK_LOG,
+        mode="a",
+        maxBytes=5 * 1024 * 1024,
+        backupCount=2,
+        encoding=None,
+        delay=0,
+    )
     handler.setFormatter(formatter)
     book_logger.addHandler(handler)
 
