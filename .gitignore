@@ -7,3 +7,4 @@ notebooks/output/
 **/__pycache__
 **/node_modules
 flipbook/
+data/image.txt

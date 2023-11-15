@@ -1,0 +1,39 @@
+:root {
+  --white-color: hsl(0, 0%, 100%);
+  --foreground: rgb(36, 36, 36);
+  --primary-red: #e52e1e;
+  --primary-blue: #5c79ed;
+  --primary-yellow: #f6bc2c;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-feature-settings: "kern";
+  -webkit-font-feature-settings: "kern";
+  -moz-font-feature-settings: "kern";
+  -o-font-feature-settings: "kern";
+  font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -o-font-smoothing: antialiased;
+  font-weight: 400;
+  font-family: "Sora", serif;
+  font-size: 10pt;
+  line-height: 15pt;
+  color: var(--foreground);
+}
+header {
+  padding: 25px 25px 25px 25px;
+}
+a {
+  text-decoration: none;
+}
+h1 {
+  text-transform: uppercase;
+}
