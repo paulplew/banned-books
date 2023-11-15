@@ -18,7 +18,7 @@ def setup_logger(log_level=logging.WARNING):
     logger.setLevel(log_level)
     log_format = f"BACKEND: %(asctime)s - %(levelname)s - Message: %(message)s"
     formatter = logging.Formatter(log_format)
-    handler = RotatingFileHandler(
+    file_handler = RotatingFileHandler(
         BACKEND_LOG,
         mode="a",
         maxBytes=5 * 1024 * 1024,
@@ -26,8 +26,8 @@ def setup_logger(log_level=logging.WARNING):
         encoding=None,
         delay=0,
     )
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
 
 
 def rand_book(ascii_width=90):
@@ -65,11 +65,9 @@ def rand_book(ascii_width=90):
 
 
 def run(request):
-    width = request.match_info.get("ascii_width", 90)
+    width = int(request.match_info.get("ascii_width", 90))
     setup_logger(log_level=logging.DEBUG)
     logger.info(" STARTING BACKEND ".center(100, "#"))
 
-    rand_book(width)
-    data = run(width)
-
+    data = rand_book(width)
     return web.json_response(data)

@@ -52,7 +52,7 @@ def rgb_to_hex(r, g, b):
 
 
 def pixel_colors(pixels, width, height):
-    colors = empty((width * height, 1), dtype=str).flatten()
+    colors = empty((width * height, 1), dtype=object).flatten()
     for index, pixel in enumerate(pixels):
         colors[index] = rgb_to_hex(pixel[0], pixel[1], pixel[2])
 
