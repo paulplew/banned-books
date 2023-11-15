@@ -5,3 +5,5 @@ notebooks/output/
 **/.ipynb_checkpoints
 
 **/__pycache__
+**/node_modules
+flipbook/
