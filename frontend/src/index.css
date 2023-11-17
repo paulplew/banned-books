@@ -12,6 +12,7 @@ body {
   overflow: auto;
   margin: 0;
   padding: 0;
+  background-color: black;
 }
 body {
   font-feature-settings: "kern";
@@ -36,4 +37,8 @@ a {
 }
 h1 {
   text-transform: uppercase;
+}
+.container {
+  display: flex;
+  overflow: hidden;
 }

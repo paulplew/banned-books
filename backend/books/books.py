@@ -6,7 +6,7 @@ from logging.handlers import RotatingFileHandler
 import requests
 from PIL import Image
 
-from definitions import BOOK_LOG, COVER_URL, SEARCH_URL
+from definitions import BOOK_LOG, COVER_URL, INFO_URL, SEARCH_URL
 
 from .errors import *
 
@@ -32,6 +32,21 @@ def setup_logger(author, title, log_level=logging.WARNING):
     book_logger.addHandler(handler)
 
 
+def get_info(work_key):
+    query_url = INFO_URL.format(work_key)
+
+    book_logger.info(f"fetching: '{query_url}'")
+    info = requests.get(query_url)
+    info = info.json()
+
+    if isinstance(info["description"], dict):
+        description = info["description"]["value"]
+    else:
+        description = info["description"]
+
+    return {"description": description, "subjects": info["subjects"]}
+
+
 def get_cover(isbn_list):
     assert len(isbn_list) > 0
 
@@ -45,6 +60,7 @@ def get_cover(isbn_list):
         cover_image = Image.open(BytesIO(cover.content))
 
         if cover_image.height > 1 and cover_image.width > 1:
+            cover_image.save("/tmp/image.jpg")
             break
         else:
             book_logger.warning(f"Cover not located for isbn: '{isbn}'")
@@ -92,11 +108,14 @@ def get_book_info_and_cover(author, title):
         )
 
     first_book = matching_books["docs"][0]
+    info = get_info(first_book["key"])
     cover = get_cover(first_book["isbn"])
 
     book_logger.info(f"All info located.")
     return {
         "author": author,
         "title": title,
+        "description": info["description"],
+        "subjects": info["subjects"],
         "cover": Image.open(BytesIO(cover.content)),
     }

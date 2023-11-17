@@ -2,15 +2,16 @@ from colors import color
 from numpy import empty, interp
 
 
-def image_to_ascii(img, new_width, height_scale=0.8):
+def image_to_ascii(img, new_width):
     chars = " .,-~:;!=*#$@"
 
     _, _, width, height = img.getbbox()
 
-    new_height = int((width / height) * new_width * height_scale)
+    scale_ratio = new_width / width
+    new_height = int(scale_ratio * height)
 
-    img = img.resize((new_width, int(new_height)))
-    pixels = img.getdata()
+    img = img.resize((new_width, new_height))
+    pixels = list(img.getdata())
 
     new_pixels = []
     for pixel in pixels:
@@ -34,27 +35,10 @@ def image_to_ascii(img, new_width, height_scale=0.8):
     return ascii_picture, colors
 
 
-def rgb_to_hex(r, g, b):
-    numerals = "0123456789ABCDEF"
-
-    def _base_sixteen(num):
-        if num < len(numerals):
-            return numerals[num]
-        else:
-            return numerals[num // 16] + _base_sixteen(num % 16)
-
-    assert not any([x > 255 for x in [r, g, b]])
-
-    r = _base_sixteen(r)
-    g = _base_sixteen(g)
-    b = _base_sixteen(b)
-    return f"#{r:02}{g:02}{b:02}"
-
-
 def pixel_colors(pixels, width, height):
     colors = empty((width * height, 1), dtype=object).flatten()
     for index, pixel in enumerate(pixels):
-        colors[index] = rgb_to_hex(pixel[0], pixel[1], pixel[2])
+        colors[index] = pixel
 
     colors = colors.reshape((height, width))
     return colors

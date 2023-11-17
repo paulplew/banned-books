@@ -60,7 +60,14 @@ def rand_book(ascii_width=90):
             [len(c_row) == len(p_row) for c_row, p_row in zip(colors, json_image)]
         ), "image and colors do not share dimensionality"
 
-        json_data = {"colors": colors.tolist(), "image": json_image}
+        json_data = {
+            "colors": colors.tolist(),
+            "image": json_image,
+            "author": info["author"],
+            "title": info["title"],
+            "description": info["description"],
+            "subjects": info["subjects"],
+        }
         return json_data
 
 
@@ -70,4 +77,6 @@ def run(request):
     logger.info(" STARTING BACKEND ".center(100, "#"))
 
     data = rand_book(width)
-    return web.json_response(data)
+    return web.json_response(
+        data, headers={"Access-Control-Allow-Origin": "http://localhost:3000"}
+    )

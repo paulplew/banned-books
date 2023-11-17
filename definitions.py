@@ -7,6 +7,7 @@ CONFIG_PATH = Path(ROOT_DIR, "configuration.conf")
 
 SEARCH_URL = "https://openlibrary.org/search.json{}"
 COVER_URL = "https://covers.openlibrary.org/b/isbn/{}-L.jpg"
+INFO_URL = "https://openlibrary.org/{}.json"
 
 config = configparser.ConfigParser()
 with open(CONFIG_PATH, "r") as cfg:
