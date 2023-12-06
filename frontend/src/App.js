@@ -8,10 +8,13 @@ import BookProvider from "./Contexts/BookContext";
 function App() {
   const [route, setRoute] = useState(window.location.pathname);
   const [content, setContent] = useState(<Home />);
+  const [selected, setSelected] = useState("home");
 
   const handleLinkClick = (path) => {
     window.history.pushState({}, path, window.location.origin + path);
     setRoute(path);
+    setSelected(path);
+    console.log(path);
   };
 
   useEffect(() => {
@@ -51,11 +54,24 @@ function App() {
   return (
     <>
       <nav>
-        <button onClick={() => handleLinkClick("/")}>Home</button>
-        <button onClick={() => handleLinkClick("/projection")}>
+        <div
+          className={selected === "/" ? "selected button" : "button"}
+          onClick={() => handleLinkClick("/")}
+        >
+          Home
+        </div>
+        <div
+          className={selected === "/projection" ? "selected button" : "button"}
+          onClick={() => handleLinkClick("/projection")}
+        >
           Projection
-        </button>
-        <button onClick={() => handleLinkClick("/display")}>Display</button>
+        </div>
+        <div
+          className={selected === "/display" ? "selected button" : "button"}
+          onClick={() => handleLinkClick("/display")}
+        >
+          Display
+        </div>
       </nav>
       <BookProvider>{content}</BookProvider>;
     </>

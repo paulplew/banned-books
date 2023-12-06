@@ -1,4 +1,4 @@
-const sketch = (s, colors) => {
+const sketch = (s, colors, image) => {
   let dots = ".";
   let startX = 0;
   let startY = 0;
@@ -24,12 +24,13 @@ const sketch = (s, colors) => {
         s.windowHeight / colors.length,
         s.windowWidth / colors[0].length,
       );
-      imageWidth = boxSize * colors.length;
-      imageHeight = boxSize * colors[0].length;
+      imageWidth = boxSize * colors[0].length;
+      imageHeight = boxSize * colors.length;
     } catch (error) {}
 
-    startX = s.width / 2 - imageHeight / 2;
-    startY = s.height / 2 - imageWidth / 2;
+    const PADDING = 30;
+    startX = s.width - imageWidth - PADDING;
+    startY = s.height / 2 - imageHeight / 2;
 
     if (colors.length > 0) {
       drawFull();

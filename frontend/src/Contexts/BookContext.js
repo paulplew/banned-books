@@ -1,7 +1,12 @@
 import React, { useState, useEffect, createContext } from "react";
 
 const fetchBookAPI = async () => {
-  const response = await fetch("http://localhost:8080/200");
+  const response = await fetch("http://localhost:8080/books/200");
+  return await response.json();
+};
+
+const fetchSubjectsAPI = async () => {
+  const response = await fetch("http://localhost:8080/subjects");
   return await response.json();
 };
 
@@ -13,6 +18,8 @@ export function BookProvider(props) {
   const [author, setAuthor] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [subjects, setSubjects] = useState([]);
+  const [resetTime, setResetTime] = useState(Date.now());
 
   useEffect(() => {
     const myFunction = () => {
@@ -25,6 +32,7 @@ export function BookProvider(props) {
             setAuthor(response["author"]);
             setTitle(response["title"]);
             setDescription(response["description"]);
+            setResetTime(Date.now());
           })
           .catch((error) => {
             console.error(error);
@@ -37,6 +45,18 @@ export function BookProvider(props) {
     return () => clearInterval(intervalId);
   }, []);
 
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      await fetchSubjectsAPI()
+        .then((response) => {
+          setSubjects(response);
+        })
+        .catch((error) => console.error(error));
+    };
+
+    fetchSubjects().catch(console.error);
+  }, []);
+
   return (
     <BookContext.Provider
       value={{
@@ -45,6 +65,8 @@ export function BookProvider(props) {
         author,
         title,
         description,
+        subjects,
+        resetTime,
       }}
     >
       {props.children}
