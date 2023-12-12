@@ -65,6 +65,7 @@ def rand_book(ascii_width=90):
             "image": json_image,
             "author": info["author"],
             "title": info["title"],
+            "isbn": info["isbn"],
             "description": info["description"],
             "subjects": info["subjects"],
         }

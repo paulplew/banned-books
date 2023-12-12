@@ -1,4 +1,4 @@
-:root {
+:croot {
   --white-color: hsl(0, 0%, 100%);
   --foreground: rgb(36, 36, 36);
   --primary-red: #e52e1e;
@@ -38,6 +38,7 @@ a {
 }
 h1 {
   font-family: "Montserrat", sans-serif;
+  color: #dddddd;
 }
 h2 {
   font-family: "Lora", serif;
@@ -72,4 +73,11 @@ nav {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+}
+
+img {
+  filter: gray; /* IE6-9 */
+  -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+  filter: grayscale(1); /* Microsoft Edge and Firefox 35+ */
+  z-index: -100;
 }

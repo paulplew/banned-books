@@ -70,7 +70,7 @@ def get_cover(isbn_list):
             f"No covers found for any isbn in: {','.join(isbn_list)}"
         )
 
-    return cover
+    return {"cover": cover, "isbn": isbn}
 
 
 def get_book_info(author, title):
@@ -115,7 +115,8 @@ def get_book_info_and_cover(author, title):
     return {
         "author": author,
         "title": title,
+        "isbn": cover["isbn"],
         "description": info["description"],
         "subjects": info["subjects"],
-        "cover": Image.open(BytesIO(cover.content)),
+        "cover": Image.open(BytesIO(cover["cover"].content)),
     }

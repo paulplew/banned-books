@@ -44,10 +44,10 @@ const projectionSketch = (s, subjects) => {
   };
 
   s.draw = () => {
-    s.background(0);
+    s.background(30);
     hexagon.display();
 
-    if (s.frameCount % 30 === 0) {
+    if (s.frameCount % 16 === 0) {
       const c = colors[Math.floor(Math.random() * colors.length)];
       let newBox = new FallingSubject(
         Math.min(s.width / 2, s.height / 2),
@@ -82,6 +82,7 @@ const projectionSketch = (s, subjects) => {
       this.opacity = 255;
 
       this.root3__2 = Math.sqrt(3) / 2;
+      this.rotation = 135;
     }
 
     display() {
@@ -90,7 +91,7 @@ const projectionSketch = (s, subjects) => {
       s.scale(this.height / 2);
       s.strokeWeight(0.005);
       s.stroke(25);
-      s.rotate(135);
+      s.rotate(this.rotation);
       s.fill(this.r, this.g, this.b, this.opacity);
       s.beginShape();
       s.vertex(0, 1);

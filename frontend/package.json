@@ -4,6 +4,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@observablehq/runtime": "5",
+    "abc2253b659f06bf": "https://api.observablehq.com/d/abc2253b659f06bf@640.tgz?v=3",
+    "d3": "^7.8.5",
     "p5": "^1.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

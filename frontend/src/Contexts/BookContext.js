@@ -20,30 +20,24 @@ export function BookProvider(props) {
   const [description, setDescription] = useState("");
   const [subjects, setSubjects] = useState([]);
   const [resetTime, setResetTime] = useState(Date.now());
+  const [isbn, setISBN] = useState(0);
 
-  useEffect(() => {
-    const myFunction = () => {
-      const fetchBook = async () => {
-        await fetchBookAPI()
-          .then((response) => {
-            console.log(response);
-            setColors(response["colors"]);
-            setImage(response["image"]);
-            setAuthor(response["author"]);
-            setTitle(response["title"]);
-            setDescription(response["description"]);
-            setResetTime(Date.now());
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      };
-      fetchBook().catch(console.error);
-    };
-    myFunction();
-    const intervalId = setInterval(myFunction, 120000);
-    return () => clearInterval(intervalId);
-  }, []);
+  const fetchBook = async () => {
+    await fetchBookAPI()
+      .then((response) => {
+        console.log(response);
+        setColors(response["colors"]);
+        setImage(response["image"]);
+        setAuthor(response["author"]);
+        setTitle(response["title"]);
+        setDescription(response["description"].slice(0, 240) + "...");
+        setISBN(response["isbn"]);
+        setResetTime(Date.now());
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
     const fetchSubjects = async () => {
@@ -60,6 +54,7 @@ export function BookProvider(props) {
   return (
     <BookContext.Provider
       value={{
+        fetchBook,
         colors,
         image,
         author,
@@ -67,6 +62,7 @@ export function BookProvider(props) {
         description,
         subjects,
         resetTime,
+        isbn,
       }}
     >
       {props.children}
